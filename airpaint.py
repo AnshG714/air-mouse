@@ -47,9 +47,16 @@ def defunc():
             pyautogui.moveRel(delX, delY, duration=0.1)
 
 
-def parse(data):
+def parse(data: str):
     """
     returns the delta X, delta Y and boolean indicating
     whether the relevant button on the frdm button is pressed or not. 
     """
-    pass
+    dataList = data.split(",")
+
+    deltaX = dataList[1] - dataList[0]
+    deltaY = dataList[3] - dataList[2]
+
+    isPressed = dataList[4] == -1
+
+    return deltaX, deltaY, isPressed
