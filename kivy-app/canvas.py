@@ -5,6 +5,7 @@ from kivy.graphics import Line
 from kivy.clock import Clock
 import serial
 import pyautogui
+import time
 
 
 class DrawInput(Widget):
@@ -25,21 +26,24 @@ class DrawInput(Widget):
     def timer(self, dt):
 
         # just a placeholder to test timed serial stuff.
-        self.canvas.clear()
-        self.remove_widget(self.b)
-        self.add_widget(self.b)
+        # self.canvas.clear()
+        # self.remove_widget(self.b)
+        # self.add_widget(self.b)
 
         # actual implementation, ask Apu how he's sending data
-        b1 = True  # stores whether the mouse is pressed or no
 
-        pyautogui.click()
-        while self.distance > 0:
-            pyautogui.dragRel(self.distance, 0, duration=0.2)   # move right
-            self.distance -= 5
-            pyautogui.dragRel(0, self.distance, duration=0.2)   # move down
-            pyautogui.dragRel(-self.distance, 0, duration=0.2)  # move left
-            self.distance -= 5
-            pyautogui.dragRel(0, -self.distance, duration=0.2)  # move up
+        b1 = True  # stores whether the mouse is pressed or no
+        # while self.distance > 0:
+        #     pyautogui.dragRel(self.distance, 0, duration=0.2,
+        #                       button='left')   # move right
+        #     self.distance -= 5
+        #     pyautogui.dragRel(0, self.distance, duration=0.2,
+        #                       button='left')   # move down
+        #     pyautogui.dragRel(-self.distance, 0, duration=0.2,
+        #                       button='left')  # move left
+        #     self.distance -= 5
+        #     pyautogui.dragRel(0, -self.distance, duration=0.2,
+        #                       button='left')  # move up
 
     def on_touch_down(self, touch):
         with self.canvas:
@@ -47,6 +51,22 @@ class DrawInput(Widget):
             super(DrawInput, self).on_touch_down(touch)
             self.remove_widget(self.b)
             self.add_widget(self.b)
+
+        time.sleep(5)
+        pyautogui.click()
+        while self.distance > 0:
+            print(self.distance)
+
+            pyautogui.dragRel(self.distance, 0, duration=0.2,
+                              button='left')   # move right
+            self.distance -= 5
+            pyautogui.dragRel(0, self.distance, duration=0.2,
+                              button='left')   # move down
+            pyautogui.dragRel(-self.distance, 0, duration=0.2,
+                              button='left')  # move left
+            self.distance -= 5
+            pyautogui.dragRel(0, -self.distance, duration=0.2,
+                              button='left')  # move up
 
     def on_touch_move(self, touch):
         touch.ud["line"].points += (touch.x, touch.y)
@@ -66,13 +86,13 @@ class SimpleKivy4(App):
 
 if __name__ == "__main__":
 
-    try:
-        frdm = serial.Serial('/dev/tty.usbmodem1421', 9600)  # replace
+    # try:
+    #     frdm = serial.Serial('/dev/tty.usbmodem1421', 9600)  # replace
 
-    except:
-        print("failed to connect")
-        exit()
+    # except:
+    #     print("failed to connect")
+    #     exit()
 
     SimpleKivy4().run()
 
-    frdm.close()
+    # frdm.close()
