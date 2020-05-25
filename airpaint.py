@@ -2,24 +2,11 @@ import pyautogui
 import time
 import serial
 
-time.sleep(10)
+# time.sleep(10)
+
+"""
 distance = 200
 
-"""
-NOTE: Uncomment all this stuff when the board has been connected to the
-computer. 
-
-try:
-    frdm = serial.Serial('/dev/tty.usbmodem1421', 9600)  # replace
-
-except:
-    print("failed to connect")
-    exit()
-
-"""
-
-# just something that draws a spiral.
-pyautogui.click()
 while distance > 0:
 
     pyautogui.dragRel(distance, 0, duration=0.2,
@@ -33,11 +20,24 @@ while distance > 0:
     pyautogui.dragRel(0, -distance, duration=0.2,
                       button='left')  # move up
 
+"""
 
-def defunc():
+
+def draw():
     """
-    remove all this from a function.
+    This function gives you 10 seconds to open up your canvas and select your 
+    drawing tool. Hover your mouse over the starting position. 
+
     """
+    time.sleep(10)
+
+    try:
+        frdm = serial.Serial('/dev/tty.usbmodem1421', 9600)  # replace
+    except:
+        print("failed to connect")
+        exit()
+
+    pyautogui.click()
     while True:
         latestData = frdm.readline()
         delX, delY, buttonPressed = parse(latestData)
@@ -60,3 +60,7 @@ def parse(data: str):
     isPressed = dataList[4] == -1
 
     return deltaX, deltaY, isPressed
+
+
+if __name__ == "__main__":
+    draw()
