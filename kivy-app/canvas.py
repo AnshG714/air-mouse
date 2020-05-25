@@ -4,6 +4,7 @@ from kivy.uix.button import Button
 from kivy.graphics import Line
 from kivy.clock import Clock
 import serial
+import pyautogui
 
 
 class DrawInput(Widget):
@@ -16,8 +17,9 @@ class DrawInput(Widget):
         self.b.bind(on_press=self.clear)
 
         self.add_widget(self.b)
+        self.distance = 200
 
-        refresh_time = 5
+        refresh_time = 0.1
         Clock.schedule_interval(self.timer, refresh_time)
 
     def timer(self, dt):
@@ -28,7 +30,16 @@ class DrawInput(Widget):
         self.add_widget(self.b)
 
         # actual implementation, ask Apu how he's sending data
-        value = frdm.readline()
+        b1 = True  # stores whether the mouse is pressed or no
+
+        pyautogui.click()
+        while self.distance > 0:
+            pyautogui.dragRel(self.distance, 0, duration=0.2)   # move right
+            self.distance -= 5
+            pyautogui.dragRel(0, self.distance, duration=0.2)   # move down
+            pyautogui.dragRel(-self.distance, 0, duration=0.2)  # move left
+            self.distance -= 5
+            pyautogui.dragRel(0, -self.distance, duration=0.2)  # move up
 
     def on_touch_down(self, touch):
         with self.canvas:
